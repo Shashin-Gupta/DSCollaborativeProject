@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torchvision.models as models
 
-class NoduleClassifier(nn.Module):
+class DRClassifier(nn.Module):
     def __init__(self, num_classes=2, pretrained=True):
         super().__init__()
         self.backbone = models.resnet50(pretrained=pretrained)
