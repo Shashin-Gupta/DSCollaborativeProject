@@ -1,6 +1,8 @@
 from io import BytesIO
 import os
 import glob
+import boto3
+from dotenv import load_dotenv
 import numpy as np
 import pydicom
 from PIL import Image
@@ -10,7 +12,7 @@ from albumentations import Compose, Resize, Normalize
 from albumentations.pytorch import ToTensorV2
 
 class DRDataset(Dataset):
-    def __init__(self, df, s3_client, bucket_name, transforms=None, prefix='LIDC-IDRI'):
+    def __init__(self, df, s3_client, bucket_name, transforms=None, prefix='Diabetic Retinopathy Screening AI.v1i.multiclass/'):
         self.df = df.reset_index(drop=True)
         self.s3 = s3_client
         self.bucket = bucket_name
@@ -26,6 +28,14 @@ class DRDataset(Dataset):
         return len(self.df)
 
     def __getitem__(self, idx):
+        # load_dotenv()
+        # s3 = boto3.client(
+        #     's3',
+        #     aws_access_key_id=os.getenv('ACCESS_KEY'),
+        #     aws_secret_access_key=os.getenv('SECRET_KEY'),
+        #     region_name='us-east-2'
+        # )
+    
         row = self.df.iloc[idx]
         pid = str(row['filename'])
         label = int(row['Diagnosis'])
