@@ -1,5 +1,7 @@
 # Detecting Diabetic Retinopathy with Computer Vision
 
+By: Cyrus Navasca, Shashin Gupta and Owen Feng
+
 This project implements a computer vision pipeline to detect diabetic retinopathy, an eye disease affecting diabetes patients, from retina scans. It includes data loading, preprocessing, model training, and evaluation.
 
 ## Project Structure
