@@ -25,9 +25,8 @@ DSCOLLABORATIVE_CV_Project/
     └── train.py            # training & evaluation loop
 ```
 
-## Quickstart
+## Model Training
 
-1. Train the model:
    ```bash
    python src/train.py \
      --data_dir data/LIDC-IDRI \
