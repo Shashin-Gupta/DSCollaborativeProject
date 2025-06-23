@@ -28,11 +28,12 @@ DSCOLLABORATIVE_CV_Project/
 ## Model Training
 
    ```bash
-   python src/train.py \
-     --data_dir data/LIDC-IDRI \
-     --csv data/annotations.csv \
-     --epochs 10 \
-     --batch_size 8 \
-     --lr 0.01 \
-     --output_dir outputs
+   PYTHONPATH=. python3 src/train.py \
+  --csv data/annotations_combined.csv \
+  --bucket diabetic-retinopathy-project-2025 \
+  --epochs 10 \
+  --batch_size 8 \
+  --lr 1e-4 \
+  --weight_decay 0.01 \
+  --output_dir outputs
    ```
