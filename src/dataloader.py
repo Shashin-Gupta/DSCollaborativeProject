@@ -28,23 +28,24 @@ class DRDataset(Dataset):
         return len(self.df)
 
     def __getitem__(self, idx):
-        # load_dotenv()
-        # s3 = boto3.client(
-        #     's3',
-        #     aws_access_key_id=os.getenv('ACCESS_KEY'),
-        #     aws_secret_access_key=os.getenv('SECRET_KEY'),
-        #     region_name='us-east-2'
-        # )
-    
         row = self.df.iloc[idx]
         pid = str(row['filename'])
         label = int(row['Diagnosis'])
 
         key = f"{self.prefix}{pid}"  # assumes file name = patientid.jpg
-        print('KEYSTER', key)
-        # Read image directly from S3
-        response = self.s3.get_object(Bucket=self.bucket, Key=key)
-        img_bytes = response['Body'].read()
+
+        # Retry logic
+        for attempt in range(3):
+            try:
+                response = self.s3.get_object(Bucket=self.bucket, Key=key)
+                img_bytes = response['Body'].read()
+                break
+            except Exception as e:
+                if attempt == 2:
+                    raise e  # re-raise on final attempt
+                else:
+                    print(f"[Retrying S3 fetch] {key} (Attempt {attempt + 1}/3)")
+
         img = Image.open(BytesIO(img_bytes)).convert("RGB")
 
         # Apply transforms
@@ -52,3 +53,4 @@ class DRDataset(Dataset):
         augmented = self.transforms(image=img)
         tensor = augmented['image']
         return tensor, torch.tensor(label, dtype=torch.long)
+
